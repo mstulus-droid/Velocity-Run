@@ -1,0 +1,25 @@
+{
+  "name": "velocity-run",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Synthwave endless racer in real 3D: weave through traffic, chain near-miss combos, ride the nitro.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "node tests/e2e/static-server.mjs .",
+    "serve:dist": "node tests/e2e/static-server.mjs dist",
+    "test:e2e": "node tests/e2e/playthrough.mjs",
+    "shots": "node tests/e2e/screenshots.mjs",
+    "perf": "node tests/e2e/perf.mjs"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0",
+    "playwright": "^1.62.1"
+  },
+  "license": "MIT"
+}
