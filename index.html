@@ -8,7 +8,7 @@
 <meta name="description" content="Synthwave endless racer in real 3D. Weave through traffic, chain near-miss combos, ride the nitro.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏎️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Exo+2:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <style>
 :root{
   --neon:#ff006e;
@@ -78,31 +78,43 @@ canvas#fx{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:10
 .overlay{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:24px;text-align:center;background:rgba(8,2,16,.66);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .35s}
 .overlay.on{opacity:1;pointer-events:auto}
+/* Overlay yang tidak aktif hanya transparan; tombolnya (pointer-events:auto) dulu tetap
+   menangkap ketukan dan menutupi tombol overlay lain di posisi yang sama. */
+.overlay:not(.on) *{pointer-events:none !important}
 
 .badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.14);
   background:rgba(255,255,255,.05);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;color:rgba(255,255,255,.7)}
 .badge .pulse{width:8px;height:8px;border-radius:50%;background:var(--neon);animation:pulse 1.6s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
-/* ===== layar judul: krom synthwave =====
-   Judul miring seperti mobil yang melaju, hurufnya krom yang terbelah garis
-   cakrawala (putih di atas, warna neon di bawah), lalu garis cakrawala itu
-   sendiri dengan matahari bergaris kecil. Rekor dibaca dari odometer dasbor. */
-.tcredit{font-family:'Orbitron',sans-serif;font-weight:700;font-size:11px;letter-spacing:.34em;color:rgba(255,255,255,.6);
-  text-shadow:0 0 12px rgba(255,0,110,.6);margin-bottom:6px;white-space:nowrap}
-@media (max-width:480px){.tcredit{font-size:10px;letter-spacing:.24em}}
-h1.title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(2.5rem,9.5vw,5.6rem);line-height:.92;letter-spacing:.02em;margin:10px 0 6px;
-  transform:skewX(-11deg)}
+/* ===== layar judul: kokpit di garis start =====
+   Jalan 3D di belakang dibiarkan terlihat (kaca buramnya tipis): menu ini
+   bukan kartu di tengah layar, melainkan kokpit. Judul krom miring di atas,
+   RUN ditarik garis kecepatan. Di bawah ada dasbor: jarum rekor yang
+   menyentak saat menu muncul, lampu start yang menyala bergiliran, tombol
+   Tancap Gas miring, dan tombol kemudi. Huruf: Orbitron untuk judul, angka,
+   dan tombol; Exo 2 miring untuk kalimat. */
+#menu{justify-content:space-between;gap:18px;padding:clamp(66px,11vh,120px) 18px calc(50px + env(safe-area-inset-bottom,0px));backdrop-filter:blur(1.5px);
+  background:linear-gradient(180deg,rgba(8,2,16,.9) 0%,rgba(8,2,16,.42) 36%,rgba(8,2,16,.06) 54%,rgba(8,2,16,.5) 72%,rgba(8,2,16,.94) 100%)}
+.vr-top{display:flex;flex-direction:column;align-items:center;width:min(1100px,100%)}
+.tcredit{display:flex;align-items:center;gap:12px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:12px;letter-spacing:.34em;
+  color:rgba(255,255,255,.72);text-shadow:0 0 12px rgba(255,0,110,.6);white-space:nowrap}
+.tcredit::before,.tcredit::after{content:'';width:20px;height:12px;transform:skewX(-14deg);
+  background:repeating-conic-gradient(#fff 0 25%,#1b0c2a 0 50%) 0 0/6px 6px;box-shadow:0 0 8px rgba(255,255,255,.25)}
+h1.title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(2.6rem,min(11.4vw,15vh),8.4rem);line-height:.9;letter-spacing:.01em;
+  margin:.28em 0 0;transform:skewX(-11deg)}
 h1.title .l1{display:block;background:linear-gradient(180deg,#fff 0%,#ffe9f4 34%,#ffb3d6 44%,#b8004f 49%,#ff2f8a 55%,#ff9ccf 82%,#fff 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 rgba(0,0,0,.55)) drop-shadow(0 0 22px rgba(255,0,110,.35))}
-h1.title .l2{display:block;background:linear-gradient(180deg,#d8ffff 0%,#00f5ff 44%,#005259 49%,#00f5ff 55%,#8ffaff 82%,#fff 100%);
+h1.title .l2{display:flex;align-items:center;gap:.22em}
+h1.title .l2::before{content:'';flex:1;height:.62em;margin-top:.04em;
+  background:repeating-linear-gradient(180deg,rgba(0,245,255,.95) 0 3px,transparent 3px 11px);
+  -webkit-mask:linear-gradient(90deg,transparent,#000 70%);mask:linear-gradient(90deg,transparent,#000 70%);
+  filter:drop-shadow(0 0 6px rgba(0,245,255,.7));animation:streak .5s linear infinite}
+@keyframes streak{0%{transform:translateX(0)}50%{transform:translateX(-6px)}100%{transform:translateX(0)}}
+h1.title .l2 b{font-weight:900;background:linear-gradient(180deg,#d8ffff 0%,#00f5ff 44%,#005259 49%,#00f5ff 55%,#8ffaff 82%,#fff 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 rgba(0,0,0,.55)) drop-shadow(0 0 22px rgba(0,245,255,.4))}
-.horizon{position:relative;width:min(86vw,620px);height:2px;margin:26px auto 16px;
-  background:linear-gradient(90deg,transparent,var(--neon) 28%,#fff 50%,var(--cyan) 72%,transparent);box-shadow:0 0 18px rgba(255,0,110,.6)}
-.horizon::before{content:'';position:absolute;left:50%;bottom:1px;width:46px;height:23px;transform:translateX(-50%);border-radius:46px 46px 0 0;
-  background:linear-gradient(180deg,var(--yellow),var(--neon));box-shadow:0 0 22px rgba(255,120,60,.55);
-  -webkit-mask:repeating-linear-gradient(180deg,#000 0 4px,transparent 4px 6px);mask:repeating-linear-gradient(180deg,#000 0 4px,transparent 4px 6px)}
-.subtitle{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:rgba(255,255,255,.55);max-width:460px;line-height:1.7;margin-bottom:18px}
+.subtitle{font-family:'Exo 2',sans-serif;font-style:italic;font-weight:500;font-size:clamp(.98rem,1.4vw,1.14rem);line-height:1.5;
+  color:rgba(255,226,240,.86);max-width:46ch;margin-top:18px;text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 14px rgba(8,2,16,.95)}
 
 .btn{pointer-events:auto;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   border:none;border-radius:14px;cursor:pointer;transition:.25s;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:10px}
@@ -112,21 +124,96 @@ h1.title .l2{display:block;background:linear-gradient(180deg,#d8ffff 0%,#00f5ff 
 .btn-ghost:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5)}
 .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:14px}
 
-.dash{display:inline-flex;align-items:center;gap:16px;margin:0 0 18px;padding:9px 18px;border-radius:12px;
-  border:1px solid rgba(255,255,255,.14);background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 24px rgba(255,0,110,.12)}
-.dash .lab{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:.3em;color:rgba(255,255,255,.55)}
-.dash .odo{font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:900;letter-spacing:.1em;color:var(--cyan);text-shadow:0 0 14px rgba(0,245,255,.55)}
+/* dasbor */
+.console{position:relative;width:min(980px,100%);display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:20px;
+  padding:20px 28px 18px;background:linear-gradient(180deg,rgba(44,10,66,.78),rgba(14,4,26,.94));
+  border:1px solid rgba(255,0,110,.38);border-radius:56px 56px 12px 12px / 34px 34px 12px 12px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -20px 40px rgba(0,0,0,.35),0 -8px 40px rgba(255,0,110,.2)}
+.console::before{content:'';position:absolute;left:12%;right:12%;top:-1px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--neon) 30%,var(--cyan) 70%,transparent);box-shadow:0 0 14px var(--neon)}
 
-.howto{display:flex;gap:20px;justify-content:center;margin:4px 0 24px;flex-wrap:wrap}
-.howto .k{display:flex;flex-direction:column;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9px;
-  letter-spacing:.18em;color:rgba(255,255,255,.45)}
-.key{min-width:44px;padding:9px 13px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);
-  font-size:13px;color:#fff;box-shadow:0 3px 0 rgba(255,255,255,.08)}
+.gauge{justify-self:start;display:flex;align-items:center;gap:14px;text-align:left}
+.dial{position:relative;flex:none;width:104px;height:60px;overflow:hidden}
+.dial::before,.dial::after{content:'';position:absolute;left:0;top:0;width:104px;height:104px;border-radius:50%}
+.dial::before{background:conic-gradient(from -90deg,var(--cyan) 0 70deg,var(--yellow) 70deg 130deg,var(--neon) 130deg 180deg,transparent 180deg);
+  -webkit-mask:radial-gradient(circle,transparent 42px,#000 43px 50px,transparent 51px);mask:radial-gradient(circle,transparent 42px,#000 43px 50px,transparent 51px);
+  filter:drop-shadow(0 0 6px rgba(255,0,110,.6))}
+.dial::after{background:repeating-conic-gradient(from -91deg,rgba(255,255,255,.8) 0 2deg,transparent 2deg 18deg);
+  -webkit-mask:radial-gradient(circle,transparent 31px,#000 32px 37px,transparent 38px);mask:radial-gradient(circle,transparent 31px,#000 32px 37px,transparent 38px)}
+.dial .sweep{position:absolute;left:50px;top:14px;width:4px;height:38px;transform-origin:50% 100%;transform:rotate(40deg);
+  animation:rev 1.7s cubic-bezier(.3,1.5,.5,1) .35s both}
+.dial .sweep i{display:block;width:100%;height:100%;border-radius:3px;background:linear-gradient(#fff,var(--neon));box-shadow:0 0 10px var(--neon);
+  animation:idle .09s ease-in-out 2s infinite alternate}
+.dial .hub{position:absolute;left:44px;top:44px;width:16px;height:16px;border-radius:50%;background:#1a0b26;border:2px solid var(--neon);box-shadow:0 0 10px rgba(255,0,110,.7)}
+@keyframes rev{0%{transform:rotate(-88deg)}40%{transform:rotate(78deg)}62%{transform:rotate(22deg)}100%{transform:rotate(40deg)}}
+@keyframes idle{from{transform:rotate(-1.5deg)}to{transform:rotate(1.5deg)}}
+.gauge .lab{display:block;font-family:'Orbitron',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3em;color:rgba(255,255,255,.62)}
+.gauge .odo{display:block;margin-top:4px;font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:900;letter-spacing:.05em;white-space:nowrap;
+  color:var(--cyan);text-shadow:0 0 14px rgba(0,245,255,.55)}
 
-.backlink{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;z-index:31;
-  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;pointer-events:none}
-.backlink a{pointer-events:auto;color:rgba(255,255,255,.35);text-decoration:none;transition:.25s}
+.ignite{display:flex;flex-direction:column;align-items:center;gap:14px}
+.lights{display:flex;gap:10px;padding:8px 12px;border-radius:8px;background:#07020d;border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 2px 6px rgba(0,0,0,.8)}
+.lights i{width:18px;height:18px;border-radius:50%;background:#34101b;box-shadow:inset 0 2px 3px rgba(0,0,0,.8)}
+.lights i:nth-child(1){animation:lampA 3.4s infinite}
+.lights i:nth-child(2){animation:lampB 3.4s infinite}
+.lights i:nth-child(3){animation:lampC 3.4s infinite}
+.lights i:nth-child(4){background:#0c2a1c;animation:lampGo 3.4s infinite}
+@keyframes lampA{0%,8%,70%,100%{background:#34101b;box-shadow:inset 0 2px 3px rgba(0,0,0,.8)}10%,68%{background:#ff2a4d;box-shadow:0 0 14px #ff2a4d,inset 0 -2px 3px rgba(0,0,0,.3)}}
+@keyframes lampB{0%,24%,70%,100%{background:#34101b;box-shadow:inset 0 2px 3px rgba(0,0,0,.8)}26%,68%{background:#ff2a4d;box-shadow:0 0 14px #ff2a4d,inset 0 -2px 3px rgba(0,0,0,.3)}}
+@keyframes lampC{0%,40%,70%,100%{background:#34101b;box-shadow:inset 0 2px 3px rgba(0,0,0,.8)}42%,68%{background:#ff2a4d;box-shadow:0 0 14px #ff2a4d,inset 0 -2px 3px rgba(0,0,0,.3)}}
+@keyframes lampGo{0%,70%{background:#0c2a1c;box-shadow:inset 0 2px 3px rgba(0,0,0,.8)}72%,96%{background:var(--green);box-shadow:0 0 18px var(--green)}98%,100%{background:#0c2a1c}}
+
+#btnPlay{font-family:'Orbitron',sans-serif;font-weight:900;font-size:17px;letter-spacing:.14em;padding:18px 44px;border-radius:4px;color:#fff;
+  background:linear-gradient(180deg,#ff5aa0,var(--neon) 48%,#b0004c);transform:skewX(-14deg);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.14),inset 0 2px 0 rgba(255,255,255,.4),0 6px 0 #6b002e,0 0 34px rgba(255,0,110,.5)}
+#btnPlay .un{display:inline-flex;align-items:center;gap:10px;transform:skewX(14deg)}
+#btnPlay:hover{transform:skewX(-14deg) translateY(-2px);box-shadow:inset 0 0 0 2px rgba(255,255,255,.2),inset 0 2px 0 rgba(255,255,255,.4),0 8px 0 #6b002e,0 0 50px rgba(255,0,110,.7)}
+
+.console .howto{justify-self:end;display:grid;grid-template-columns:repeat(2,auto);gap:9px 16px}
+.howto .k{display:flex;align-items:center;gap:9px;font-family:'Exo 2',sans-serif;font-style:italic;font-weight:600;font-size:13px;
+  letter-spacing:.03em;color:rgba(255,255,255,.74);white-space:nowrap}
+.key{flex:none;min-width:46px;padding:6px 9px;border-radius:4px;transform:skewX(-10deg);text-align:center;
+  border:1px solid rgba(0,245,255,.38);background:rgba(0,245,255,.07);font-family:'Orbitron',sans-serif;font-weight:700;font-size:12px;color:#dffcff}
+#menu :focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+
+@media (max-width:760px){
+  .console{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"ign ign" "gauge keys";gap:16px 12px;padding:18px 16px 16px;
+    border-radius:40px 40px 12px 12px / 26px 26px 12px 12px}
+  .ignite{grid-area:ign}
+  .gauge{grid-area:gauge;flex-direction:column;align-items:flex-start;gap:6px}
+  .console .howto{grid-area:keys;grid-template-columns:1fr;gap:7px}
+  .gauge .odo{font-size:1rem}
+  .subtitle br{display:none}
+}
+@media (max-width:1000px) and (min-width:761px){
+  .console{padding:16px 16px 14px;gap:12px}
+  .dial{zoom:.8}
+  .gauge{gap:10px}
+  .gauge .odo{font-size:1rem}
+  #btnPlay{padding:16px 28px;font-size:15px}
+  .howto .k{font-size:12px}
+  .key{min-width:40px}
+}
+/* HP mendatar: judul dan dasbor dipadatkan; kalimat pembuka hanya disembunyikan di layar yang sangat pendek */
+@media (max-height:560px) and (min-width:761px){
+  #menu{padding-top:52px;padding-bottom:calc(40px + env(safe-area-inset-bottom,0px));gap:10px}
+  h1.title{font-size:clamp(2.2rem,13vh,4rem)}
+  .subtitle{font-size:.9rem;margin-top:8px}
+  .console{padding-top:12px;padding-bottom:12px}
+  .ignite{gap:8px}
+  .lights i{width:14px;height:14px}
+}
+@media (max-height:450px) and (min-width:761px){
+  .subtitle{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .lights i{animation:none !important}
+  .lights i:nth-child(4){background:var(--green);box-shadow:0 0 18px var(--green)}
+}
+
+.backlink{position:fixed;bottom:calc(8px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;z-index:31;
+  font-family:'Orbitron',sans-serif;font-weight:700;font-size:12px;letter-spacing:.22em;pointer-events:none}
+.backlink a{display:inline-flex;align-items:center;min-height:40px;padding:0 6px;pointer-events:auto;color:rgba(255,255,255,.45);text-decoration:none;transition:.25s}
 .backlink a:hover{color:var(--neon)}
 
 .card{background:rgba(14,4,26,.88);border:1px solid rgba(255,0,110,.3);border-radius:24px;padding:26px 32px;min-width:min(360px,88vw);
@@ -145,10 +232,10 @@ h1.title .l2{display:block;background:linear-gradient(180deg,#d8ffff 0%,#00f5ff 
 
 #flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:35}
 
-.langtoggle{position:fixed;top:max(14px,env(safe-area-inset-top,0px) + 6px);left:14px;z-index:32;display:flex;border:1px solid rgba(255,255,255,.18);
-  border-radius:10px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:10px}
-.langtoggle button{background:transparent;border:none;color:rgba(255,255,255,.45);padding:8px 12px;cursor:pointer;letter-spacing:.1em}
-.langtoggle button.on{background:var(--neon);color:#fff;font-weight:700}
+.langtoggle{position:fixed;top:max(14px,env(safe-area-inset-top,0px) + 6px);left:18px;z-index:32;display:flex;gap:4px;transform:skewX(-12deg)}
+.langtoggle button{background:rgba(12,4,22,.7);border:1px solid rgba(255,0,110,.4);border-radius:3px;color:rgba(255,255,255,.55);min-height:40px;padding:9px 13px;cursor:pointer;
+  font-family:'Orbitron',sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em}
+.langtoggle button.on{background:linear-gradient(180deg,#ff5aa0,var(--neon));border-color:var(--neon);color:#fff;box-shadow:0 0 14px rgba(255,0,110,.5)}
 
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important}}
 </style>
@@ -199,18 +286,27 @@ h1.title .l2{display:block;background:linear-gradient(180deg,#d8ffff 0%,#00f5ff 
 <!-- MENU -->
 <div class="overlay on" id="menu">
   <div class="langtoggle"><button id="langId">ID</button><button id="langEn">EN</button></div>
-  <div class="tcredit" data-key="badge">RHADZOR ARCADE ▸ MEMPERSEMBAHKAN</div>
-  <h1 class="title"><span class="l1">VELOCITY</span><span class="l2">RUN</span></h1>
-  <div class="horizon"></div>
-  <p class="subtitle" data-key="tagline">Selap-selip di trafik 300+ km/j. Rangkai kombo near-miss,<br>isi nitro, dan tahan gas selama nyawamu kuat.</p>
-  <div class="dash"><span class="lab" data-key="best">TERBAIK</span><b class="odo" id="menuBest">0</b></div>
-  <div class="howto">
-    <div class="k"><span class="key">◄ ►</span><span data-key="steer">BELOK</span></div>
-    <div class="k"><span class="key">SHIFT</span><span data-key="nitroK">NITRO</span></div>
-    <div class="k"><span class="key">▼</span><span data-key="brake">REM</span></div>
-    <div class="k"><span class="key">👆 DRAG</span><span data-key="steer2">HP: GESER</span></div>
+  <div class="vr-top">
+    <div class="tcredit" data-key="badge">RHADZOR ARCADE</div>
+    <h1 class="title" aria-label="VELOCITY RUN"><span class="l1">VELOCITY</span><span class="l2"><b>RUN</b></span></h1>
+    <p class="subtitle" data-key="tagline">Selap-selip di trafik 300+ km/j. Rangkai kombo near-miss, <br>isi nitro, dan tahan gas selama nyawamu kuat.</p>
   </div>
-  <button class="btn btn-primary" id="btnPlay">▶ <span data-key="play">MAIN</span></button>
+  <div class="console">
+    <div class="gauge">
+      <div class="dial" aria-hidden="true"><span class="sweep"><i></i></span><span class="hub"></span></div>
+      <div><span class="lab" data-key="best">TERBAIK</span><b class="odo" id="menuBest">0</b></div>
+    </div>
+    <div class="ignite">
+      <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <button class="btn btn-primary" id="btnPlay"><span class="un">▶ <span data-key="play">TANCAP GAS</span></span></button>
+    </div>
+    <div class="howto">
+      <div class="k"><span class="key">◄ ►</span><span data-key="steer">BELOK</span></div>
+      <div class="k"><span class="key">SHIFT</span><span data-key="nitroK">NITRO</span></div>
+      <div class="k"><span class="key">▼</span><span data-key="brake">REM</span></div>
+      <div class="k"><span class="key">👆</span><span data-key="steer2">HP: GESER</span></div>
+    </div>
+  </div>
 </div>
 
 <!-- PAUSE -->
