@@ -8,7 +8,7 @@
 <meta name="description" content="Synthwave endless racer in real 3D. Weave through traffic, chain near-miss combos, ride the nitro.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏎️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --neon:#ff006e;
@@ -84,10 +84,24 @@ canvas#fx{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:10
 .badge .pulse{width:8px;height:8px;border-radius:50%;background:var(--neon);animation:pulse 1.6s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
-h1.title{font-weight:900;font-size:clamp(2.6rem,11vw,5rem);line-height:.95;letter-spacing:-.03em;margin:20px 0 6px}
-h1.title .l1{display:block;background:linear-gradient(180deg,#fff,#ffffff66);-webkit-background-clip:text;background-clip:text;color:transparent}
-h1.title .l2{display:block;background:linear-gradient(90deg,var(--neon),var(--purple),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent;
-  filter:drop-shadow(0 0 24px rgba(255,0,110,.35))}
+/* ===== layar judul: krom synthwave =====
+   Judul miring seperti mobil yang melaju, hurufnya krom yang terbelah garis
+   cakrawala (putih di atas, warna neon di bawah), lalu garis cakrawala itu
+   sendiri dengan matahari bergaris kecil. Rekor dibaca dari odometer dasbor. */
+.tcredit{font-family:'Orbitron',sans-serif;font-weight:700;font-size:11px;letter-spacing:.34em;color:rgba(255,255,255,.6);
+  text-shadow:0 0 12px rgba(255,0,110,.6);margin-bottom:6px;white-space:nowrap}
+@media (max-width:480px){.tcredit{font-size:10px;letter-spacing:.24em}}
+h1.title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(2.5rem,9.5vw,5.6rem);line-height:.92;letter-spacing:.02em;margin:10px 0 6px;
+  transform:skewX(-11deg)}
+h1.title .l1{display:block;background:linear-gradient(180deg,#fff 0%,#ffe9f4 34%,#ffb3d6 44%,#b8004f 49%,#ff2f8a 55%,#ff9ccf 82%,#fff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 rgba(0,0,0,.55)) drop-shadow(0 0 22px rgba(255,0,110,.35))}
+h1.title .l2{display:block;background:linear-gradient(180deg,#d8ffff 0%,#00f5ff 44%,#005259 49%,#00f5ff 55%,#8ffaff 82%,#fff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 rgba(0,0,0,.55)) drop-shadow(0 0 22px rgba(0,245,255,.4))}
+.horizon{position:relative;width:min(86vw,620px);height:2px;margin:26px auto 16px;
+  background:linear-gradient(90deg,transparent,var(--neon) 28%,#fff 50%,var(--cyan) 72%,transparent);box-shadow:0 0 18px rgba(255,0,110,.6)}
+.horizon::before{content:'';position:absolute;left:50%;bottom:1px;width:46px;height:23px;transform:translateX(-50%);border-radius:46px 46px 0 0;
+  background:linear-gradient(180deg,var(--yellow),var(--neon));box-shadow:0 0 22px rgba(255,120,60,.55);
+  -webkit-mask:repeating-linear-gradient(180deg,#000 0 4px,transparent 4px 6px);mask:repeating-linear-gradient(180deg,#000 0 4px,transparent 4px 6px)}
 .subtitle{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:rgba(255,255,255,.55);max-width:460px;line-height:1.7;margin-bottom:18px}
 
 .btn{pointer-events:auto;font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
@@ -98,8 +112,11 @@ h1.title .l2{display:block;background:linear-gradient(90deg,var(--neon),var(--pu
 .btn-ghost:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5)}
 .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:14px}
 
-.beststrip{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:18px}
-.beststrip b{color:var(--neon)}
+.dash{display:inline-flex;align-items:center;gap:16px;margin:0 0 18px;padding:9px 18px;border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 24px rgba(255,0,110,.12)}
+.dash .lab{font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:.3em;color:rgba(255,255,255,.55)}
+.dash .odo{font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:900;letter-spacing:.1em;color:var(--cyan);text-shadow:0 0 14px rgba(0,245,255,.55)}
 
 .howto{display:flex;gap:20px;justify-content:center;margin:4px 0 24px;flex-wrap:wrap}
 .howto .k{display:flex;flex-direction:column;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:9px;
@@ -182,10 +199,11 @@ h1.title .l2{display:block;background:linear-gradient(90deg,var(--neon),var(--pu
 <!-- MENU -->
 <div class="overlay on" id="menu">
   <div class="langtoggle"><button id="langId">ID</button><button id="langEn">EN</button></div>
-  <div class="badge"><span class="pulse"></span><span data-key="badge">RHADZOR ARCADE</span></div>
+  <div class="tcredit" data-key="badge">RHADZOR ARCADE ▸ MEMPERSEMBAHKAN</div>
   <h1 class="title"><span class="l1">VELOCITY</span><span class="l2">RUN</span></h1>
+  <div class="horizon"></div>
   <p class="subtitle" data-key="tagline">Selap-selip di trafik 300+ km/j. Rangkai kombo near-miss,<br>isi nitro, dan tahan gas selama nyawamu kuat.</p>
-  <div class="beststrip"><span data-key="best">TERBAIK</span>: <b id="menuBest">0</b></div>
+  <div class="dash"><span class="lab" data-key="best">TERBAIK</span><b class="odo" id="menuBest">0</b></div>
   <div class="howto">
     <div class="k"><span class="key">◄ ►</span><span data-key="steer">BELOK</span></div>
     <div class="k"><span class="key">SHIFT</span><span data-key="nitroK">NITRO</span></div>

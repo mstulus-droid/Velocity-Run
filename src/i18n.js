@@ -2,18 +2,18 @@
 
 export const I18N = {
   id: {
-    badge: 'RHADZOR ARCADE',
+    badge: 'RHADZOR ARCADE ▸ MEMPERSEMBAHKAN',
     tagline: 'Selap-selip di trafik 300+ km/j. Rangkai kombo near-miss,<br>isi nitro, dan tahan gas selama nyawamu kuat.',
-    best: 'TERBAIK', play: 'MAIN', dist: 'JARAK', coins: 'KOIN', score: 'SKOR',
+    best: 'TERBAIK', play: 'TANCAP GAS', dist: 'JARAK', coins: 'KOIN', score: 'SKOR',
     steer: 'BELOK', steer2: 'HP: GESER', nitroK: 'NITRO', brake: 'REM',
     paused: 'JEDA', resume: 'LANJUT', backMenu: 'MENU', crashed: 'TABRAKAN!',
     newBest: '★ REKOR BARU ★', retry: 'LAGI', nearmiss: 'NEAR MISS',
     maxCombo: 'COMBO MAKS', topSpeed: 'TOP SPEED', graphics: 'GRAFIS',
   },
   en: {
-    badge: 'RHADZOR ARCADE',
+    badge: 'RHADZOR ARCADE ▸ PRESENTS',
     tagline: 'Weave through 300+ km/h traffic. Chain near-miss combos,<br>charge your nitro, and hold the throttle.',
-    best: 'BEST', play: 'PLAY', dist: 'DISTANCE', coins: 'COINS', score: 'SCORE',
+    best: 'BEST', play: 'FLOOR IT', dist: 'DISTANCE', coins: 'COINS', score: 'SCORE',
     steer: 'STEER', steer2: 'TOUCH: DRAG', nitroK: 'NITRO', brake: 'BRAKE',
     paused: 'PAUSED', resume: 'RESUME', backMenu: 'MENU', crashed: 'CRASHED!',
     newBest: '★ NEW BEST ★', retry: 'RETRY', nearmiss: 'NEAR MISS',
