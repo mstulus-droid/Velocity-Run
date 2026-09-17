@@ -5,7 +5,7 @@ Endless racer synthwave dalam 3D sungguhan (Three.js): selap-selip trafik, kombo
 ## Stack
 - `index.html` (HUD, overlay, CSS, import map) + modul ES di `src/` + Three.js 0.170 yang divendor di `vendor/`.
 - Dua cara jalan dengan kode yang sama: statis (import map memetakan `three` ke `vendor/three.module.js`) atau Vite (`npm run dev`, `npm run build` ke `dist/`).
-- Font Google: Outfit + JetBrains Mono (badan), Orbitron (judul dan dasbor).
+- Font Google: Outfit + JetBrains Mono (HUD, kartu akhir), Orbitron (judul, dasbor, tombol), Exo 2 miring (kalimat layar judul).
 - Bahasa di `src/i18n.js` (`I18N`, `data-key`), pilihan di localStorage `rhadzor-lang`. Simpanan: `vr_best` (jarak), `vr_bestscore`, `vr_muted`, `vr_quality`.
 
 ## Cara jalan & deploy
@@ -23,5 +23,7 @@ Endless racer synthwave dalam 3D sungguhan (Three.js): selap-selip trafik, kombo
 - Potret headless butuh WebGL: pakai `periksa-tampilan ... --gpu`. Tanpa GPU, SwiftShader lambat dan hitung mundur 3 detik berjalan dalam waktu game yang melar; uji memendekkannya lewat `window.__vr.G.countT = 0.01`.
 - Saat menu, loop tetap menggerakkan dunia (attract mode), jadi potret menu selalu "berubah" antar frame.
 - Kualitas grafis tersimpan di `vr_quality`; uji yang mengubahnya harus menghapusnya lagi.
-- Judul memakai `transform: skewX(-11deg)` pada `h1.title`; jangan menaruh elemen berposisi absolut di dalamnya tanpa memperhitungkan miringnya. `.badge` masih dipakai overlay jeda walau menu tidak lagi memakainya.
-- `.dash .odo#menuBest` diisi `game.js` dengan teks "N pts · N m"; jangan mengganti id-nya.
+- Layar judul (`#menu`) tersusun `.vr-top` (kredit, judul krom miring, kalimat) dan `.console` di bawah (jarum `.dial`, lampu start `.lights`, `#btnPlay` miring, legenda tombol). Kaca buram menu sengaja tipis supaya jalan 3D terlihat.
+- Judul memakai `transform: skewX(-11deg)` pada `h1.title`; `#btnPlay` juga miring dan teksnya diluruskan lewat `.un`. `.badge` masih dipakai overlay jeda.
+- `.overlay:not(.on) *` wajib `pointer-events:none`: tombol overlay yang transparan dulu menangkap ketukan.
+- `.gauge .odo#menuBest` diisi `game.js` dengan teks "N pts · N m"; jangan mengganti id-nya.
