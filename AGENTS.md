@@ -26,4 +26,5 @@ Endless racer synthwave dalam 3D sungguhan (Three.js): selap-selip trafik, kombo
 - Layar judul (`#menu`) tersusun `.vr-top` (kredit, judul krom miring, kalimat) dan `.console` di bawah (jarum `.dial`, lampu start `.lights`, `#btnPlay` miring, legenda tombol). Kaca buram menu sengaja tipis supaya jalan 3D terlihat.
 - Judul memakai `transform: skewX(-11deg)` pada `h1.title`; `#btnPlay` juga miring dan teksnya diluruskan lewat `.un`. `.badge` masih dipakai overlay jeda.
 - `.overlay:not(.on) *` wajib `pointer-events:none`: tombol overlay yang transparan dulu menangkap ketukan.
+- `.backlink` (z-index 31, di atas overlay) hanya tampil saat `#menu.on`. Di HP mendatar kartu TABRAKAN lebih tinggi dari layar, tombol LAGI/MENU-nya jatuh tepat di bawah tautan itu; di 390 tautan menimpa bilah KM/H.
 - `.gauge .odo#menuBest` diisi `game.js` dengan teks "N pts · N m"; jangan mengganti id-nya.

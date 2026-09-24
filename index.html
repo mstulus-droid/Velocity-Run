@@ -215,6 +215,10 @@ h1.title .l2 b{font-weight:900;background:linear-gradient(180deg,#d8ffff 0%,#00f
   font-family:'Orbitron',sans-serif;font-weight:700;font-size:12px;letter-spacing:.22em;pointer-events:none}
 .backlink a{display:inline-flex;align-items:center;min-height:40px;padding:0 6px;pointer-events:auto;color:rgba(255,255,255,.45);text-decoration:none;transition:.25s}
 .backlink a:hover{color:var(--neon)}
+/* Tautan studio hanya ada di layar judul. Selama balapan tepi bawah dipakai bilah KM/H dan tombol HUD
+   (di 390 tautan menimpanya), dan di HP mendatar kartu TABRAKAN lebih tinggi dari layar sehingga tombol
+   LAGI/MENU-nya jatuh tepat di bawah tautan ini (z-index 31 > overlay 30): ketukan MENU malah pindah halaman. */
+#menu:not(.on) ~ .backlink{display:none}
 
 .card{background:rgba(14,4,26,.88);border:1px solid rgba(255,0,110,.3);border-radius:24px;padding:26px 32px;min-width:min(360px,88vw);
   box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 60px rgba(255,0,110,.08)}
